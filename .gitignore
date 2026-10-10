@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Vinext and Vite
+dist/
+.next/
+.vinext/
+.vite/
+.wrangler/
+next-env.d.ts
+
+# TypeScript
+*.tsbuildinfo
+
+# Tests
+coverage/
+
+# Environment
+.env
+.env.*
+!.env.example
+.*.vars*
+!.dev.vars.example
+
+# Editors and operating systems
+.DS_Store
+*.swp
+
+.obsidian-vaults
+
+# Private files
+private

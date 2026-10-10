@@ -1,0 +1,46 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
+  "include": [
+    "files",
+    "dependencies",
+    "devDependencies",
+    "optionalPeerDependencies",
+    "unlisted",
+    "binaries",
+    "unresolved",
+    "exports",
+    "types",
+    "nsExports",
+    "nsTypes",
+    "duplicates",
+    "enumMembers",
+    "namespaceMembers",
+    "catalog",
+    "cycles"
+  ],
+  "includeEntryExports": false,
+  "treatConfigHintsAsErrors": true,
+  "treatTagHintsAsErrors": true,
+  "workspaces": {
+    ".": {
+      "entry": [".pokayoke/rules/**/*.rule.ts", ".pokayoke/rules/**/*.test.ts"],
+      "project": [".pokayoke/**/*.ts"]
+    },
+    "apps/web": {
+      "entry": [
+        "src/app/**/{default,error,global-error,layout,loading,not-found,page,route,template}.{ts,tsx}",
+        "src/app/**/{robots,sitemap}.{ts,tsx}",
+        "src/styles.css"
+      ],
+      "ignoreDependencies": ["next"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/obsid": {
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/scripts": {
+      "entry": ["src/test-sync.ts"],
+      "project": ["src/**/*.ts"]
+    }
+  }
+}

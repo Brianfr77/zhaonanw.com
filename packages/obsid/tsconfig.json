@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "incremental": false,
+    "jsx": "react-jsx",
+    "types": ["bun", "vite/client"]
+  },
+  "exclude": ["node_modules", "dist"],
+  "extends": "../../tsconfig.json",
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}

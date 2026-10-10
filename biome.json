@@ -1,0 +1,179 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.5/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on",
+        "useSortedAttributes": "on",
+        "useSortedKeys": "on"
+      }
+    },
+    "enabled": true
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      "!!node_modules",
+      "!!dist",
+      "!!.next",
+      "!!.vinext",
+      "!!coverage",
+      "!!apps/*/worker-configuration.d.ts"
+    ],
+    "maxSize": 1048576
+  },
+  "formatter": {
+    "attributePosition": "auto",
+    "bracketSameLine": false,
+    "enabled": true,
+    "expand": "auto",
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 100,
+    "useEditorconfig": true
+  },
+  "html": {
+    "formatter": {
+      "enabled": true
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "arrowParentheses": "always",
+      "bracketSpacing": true,
+      "expand": "always",
+      "jsxQuoteStyle": "double",
+      "quoteProperties": "asNeeded",
+      "quoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "all"
+    },
+    "jsxRuntime": "transparent"
+  },
+  "json": {
+    "formatter": {
+      "trailingCommas": "none"
+    },
+    "parser": {
+      "allowComments": true,
+      "allowTrailingCommas": true
+    }
+  },
+  "linter": {
+    "domains": {
+      "next": "all",
+      "project": "all",
+      "react": "all",
+      "test": "all"
+    },
+    "enabled": true,
+    "rules": {
+      "correctness": {
+        "noSolidDestructuredProps": "off",
+        "noUnresolvedImports": "off",
+        "useQwikValidLexicalScope": "off"
+      },
+      "nursery": {
+        "useExhaustiveSwitchCases": "error"
+      },
+      "performance": {
+        "noAwaitInLoops": "off"
+      },
+      "preset": "all",
+      "style": {
+        "noJsxLiterals": "off",
+        "noTernary": "off",
+        "useConsistentTypeDefinitions": "off"
+      },
+      "suspicious": {
+        "noReactSpecificProps": "off"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["apps/*/src/**/*.tsx"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "useSolidForComponent": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["apps/web/src/app/**", "apps/web/src/worker.ts", "apps/*/vite.config.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [".pokayoke/rules/**/*.ts"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noNodejsModules": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [".pokayoke/rules/tooling-contract.rule.ts", ".pokayoke/rules/zed-tasks.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["apps/web/obsid.config.ts"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noNodejsModules": "off"
+          },
+          "style": {
+            "noDefaultExport": "off",
+            "noProcessEnv": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "packages/obsid/src/config/**",
+        "packages/obsid/src/sync/**",
+        "packages/scripts/src/**/*.ts"
+      ],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noNodejsModules": "off"
+          },
+          "style": {
+            "noProcessEnv": "off"
+          }
+        }
+      }
+    }
+  ],
+  "root": true,
+  "vcs": {
+    "clientKind": "git",
+    "enabled": true,
+    "useIgnoreFile": true
+  }
+}

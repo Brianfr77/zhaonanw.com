@@ -1,0 +1,14 @@
+import { getVault } from "obsid/vault";
+import { createVaultRouteManifest } from "@/lib/vault/routing.ts";
+import obsidConfig from "../../../obsid.config.ts";
+import schema from "./schema.tsx";
+
+const vault = getVault(obsidConfig, schema, "zhaonanw.com");
+let vaultRouteManifest: ReturnType<typeof createVaultRouteManifest> | undefined;
+
+const getVaultRouteManifest = () => {
+  vaultRouteManifest ??= createVaultRouteManifest(vault, schema);
+  return vaultRouteManifest;
+};
+
+export { getVaultRouteManifest, vault };

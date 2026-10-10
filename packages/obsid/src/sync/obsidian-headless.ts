@@ -1,0 +1,87 @@
+import { createRequire } from "node:module";
+import { $ } from "bun";
+import type { ObsidConfig } from "../config/index.ts";
+
+const OB_COMMANDS = [
+  "login",
+  "sync-setup",
+  "sync-config",
+  "sync",
+] as const;
+
+type ObCommand = (typeof OB_COMMANDS)[number];
+
+const require = createRequire(import.meta.url);
+const OB_CLI_PATH = require.resolve("obsidian-headless/patched-cli.cjs");
+
+const logger = (level: "info" | "warn" | "error", command: ObCommand, ...args: unknown[]) => {
+  // biome-ignore lint/suspicious/noConsole: CLI progress is intentionally written to the terminal.
+  console[level](`[command = ${command}]`, args);
+};
+
+const obCommand = async (command: ObCommand, args: string[]) => {
+  const output = await $`node ${OB_CLI_PATH} ${command} ${args}`.text();
+  logger("info", command, output);
+  return output;
+};
+
+const logIn = async (opts: ObsidConfig["login"]) => {
+  const output = await obCommand("login", [
+    "--email",
+    opts.email,
+    "--password",
+    opts.password,
+  ]);
+  return output;
+};
+
+const syncSetup = async (opts: {
+  vault: string;
+  deviceName: string;
+  path: string;
+  encryptionPassword: string | undefined;
+}) => {
+  const args = [
+    "--vault",
+    opts.vault,
+    "--device-name",
+    opts.deviceName,
+    "--path",
+    opts.path,
+  ];
+  if (opts.encryptionPassword) {
+    args.push("--password", opts.encryptionPassword);
+  }
+
+  const output = await obCommand("sync-setup", args);
+  return output;
+};
+
+interface SyncConfigOptions {
+  readonly excludedFolders: readonly string[];
+  readonly path: string;
+}
+
+const getSyncConfigArgs = (opts: SyncConfigOptions): string[] => [
+  "--path",
+  opts.path,
+  "--mode",
+  "mirror-remote",
+  "--excluded-folders",
+  opts.excludedFolders.join(","),
+];
+
+const syncConfig = async (opts: SyncConfigOptions) => {
+  const output = await obCommand("sync-config", getSyncConfigArgs(opts));
+  return output;
+};
+
+const syncVault = async (opts: { path: string }) => {
+  const output = await obCommand("sync", [
+    "--path",
+    opts.path,
+  ]);
+  return output;
+};
+
+export { getSyncConfigArgs, logIn, syncConfig, syncSetup, syncVault };

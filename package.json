@@ -1,0 +1,59 @@
+{
+  "description": "The personal website of Zhaonan Wang.",
+  "devDependencies": {
+    "@biomejs/biome": "2.5.5",
+    "@types/bun": "^1.4.2",
+    "@types/node": "^26.1.1",
+    "knip": "^6.25.0",
+    "pokayoke": "^0.0.6",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "bun": ">=1.4.2"
+  },
+  "license": "MIT",
+  "name": "zhaonanw.com",
+  "packageManager": "bun@1.4.2",
+  "patchedDependencies": {
+    "obsidian-headless@0.0.14": "patches/obsidian-headless@0.0.14.patch",
+    "pokayoke@0.0.6": "patches/pokayoke@0.0.6.patch"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Brianfr77/zhaonanw.com.git"
+  },
+  "scripts": {
+    "build": "bun run content:prepare && bun run --filter './apps/*' build",
+    "build:web": "bun run build:web:content && bun run build:web:code",
+    "build:web:code": "bun run --filter @zhaonanw/web build",
+    "build:web:content": "bun run content:prepare",
+    "check": "bun run check:biome && bun run typecheck && bun run knip && bun run test && bun run pokayoke && bun run check:vinext",
+    "check:biome": "biome check --error-on-warnings --max-diagnostics=none .",
+    "check:biome:fix": "biome check --write --diagnostic-level=info --max-diagnostics=none .",
+    "check:biome:fix:unsafe": "biome check --write --unsafe --diagnostic-level=info --max-diagnostics=none .",
+    "check:vinext": "bun run --filter @zhaonanw/web check:vinext",
+    "content:prepare": "bun packages/scripts/src/prepare-vault.ts",
+    "content:sync:remote": "bun --cwd apps/web ../../packages/obsid/src/cli/index.ts sync",
+    "deploy:web": "bun --cwd apps/web wrangler deploy",
+    "deploy:web:preview": "bun --cwd apps/web wrangler versions upload",
+    "dev": "bun run --filter @zhaonanw/web dev",
+    "dev:web": "bun run --filter @zhaonanw/web dev",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "knip": "knip",
+    "knip:fix": "knip --fix",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "pokayoke": "pokayoke check",
+    "pokayoke:fix": "pokayoke check --fix",
+    "start": "bun run --filter @zhaonanw/web start",
+    "start:web": "bun run --filter @zhaonanw/web start",
+    "test": "bun test apps packages ./.pokayoke/rules/*.test.ts",
+    "typecheck": "tsc --noEmit && bun run --workspaces --if-present typecheck",
+    "verify": "bun run check && bun run build"
+  },
+  "type": "module",
+  "version": "0.1.0",
+  "workspaces": ["apps/*", "packages/*"]
+}

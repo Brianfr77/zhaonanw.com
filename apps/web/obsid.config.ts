@@ -1,0 +1,21 @@
+import process from "node:process";
+import { defineConfig } from "obsid/config";
+
+export default defineConfig({
+  excludedFolders: [
+    "__templates",
+    "__drafts",
+    ".obsidian",
+  ],
+  login: {
+    email: process.env.OBSID_EMAIL ?? "",
+    password: process.env.OBSID_PASSWORD ?? "",
+  },
+  schema: "./src/lib/vault/schema.tsx",
+  vaults: [
+    {
+      encryptionPassword: process.env.OBSID_VAULT_PRIMARY_PASSWORD ?? "",
+      name: "zhaonanw.com",
+    },
+  ],
+});

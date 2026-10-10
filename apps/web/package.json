@@ -1,0 +1,43 @@
+{
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.4.0",
+    "obsid": "workspace:*",
+    "posthog-js": "^1.418.9",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "tailwind-merge": "^3.6.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.53.1",
+    "@cloudflare/workers-types": "^5.20260821.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/bun": "^1.3.14",
+    "@types/date-fns": "^2.6.3",
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vinext/cloudflare": "^1.0.0-beta.6",
+    "@vitejs/plugin-react": "^6.0.3",
+    "@vitejs/plugin-rsc": "^0.5.34",
+    "react-server-dom-webpack": "^19.2.7",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3",
+    "vinext": "^1.0.0-beta.8",
+    "vite": "^8.1.4",
+    "wrangler": "^4.125.0"
+  },
+  "name": "@zhaonanw/web",
+  "private": true,
+  "scripts": {
+    "build": "vinext build",
+    "check:vinext": "vinext check",
+    "dev": "vinext dev --port 4444",
+    "start": "vinext start",
+    "typecheck": "tsc --noEmit"
+  },
+  "type": "module",
+  "version": "0.1.0"
+}

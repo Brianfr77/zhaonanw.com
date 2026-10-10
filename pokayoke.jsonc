@@ -1,0 +1,34 @@
+{
+  "$schema": "https://pokayoke.codes/schema.json",
+  "extends": ["pokayoke/recommended", "pokayoke/typescript/recommended"],
+  "files": [
+    ".pokayoke/rules/**/*.ts",
+    ".zed/*.json",
+    "AGENTS.md",
+    "README.md",
+    "apps/web/app/**/*.ts",
+    "apps/web/app/**/*.tsx",
+    "apps/web/package.json",
+    "apps/web/tsconfig.json",
+    "apps/web/vite.config.ts",
+    "biome.json",
+    "knip.jsonc",
+    "package.json",
+    "pokayoke.jsonc",
+    "tsconfig.json"
+  ],
+  "ignores": ["**/node_modules/**", "**/dist/**", "**/.vinext/**", "**/*.d.ts"],
+  "localRules": [".pokayoke/rules/**/*.rule.ts"],
+  "rules": {
+    "package/no-npx-in-scripts": "error",
+    "repo/tooling-contract": "error",
+    // Generated editor tasks grow with root scripts; repo/tooling-contract checks their contents.
+    "structure/max-file-lines": ["error", { "ignore": [".zed/tasks.json"], "max": 300 }],
+    "typescript/enforce-arrow-function": "error"
+  },
+  "suppressions": {
+    "directive": "pokayoke-ignore",
+    "reportUnused": "error",
+    "requireReason": true
+  }
+}

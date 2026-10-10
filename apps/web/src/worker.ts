@@ -1,0 +1,114 @@
+import vinextHandler from "vinext/server/fetch-handler";
+import { handleThumbnailRequest, isThumbnailRequest } from "@/lib/image/thumbnail-worker.ts";
+import { postHogConfig } from "@/lib/posthog/config.ts";
+
+const POSTHOG_API_ORIGIN = "https://us.i.posthog.com";
+const POSTHOG_ASSET_ORIGIN = "https://us-assets.i.posthog.com";
+const NOT_FOUND_STATUS = 404;
+const TRAILING_SLASHES = /\/+$/;
+const VINEXT_IMAGE_PATH = "/_next/image";
+
+const getProxyPath = (apiHost: string): string | null => {
+  if (!apiHost.startsWith("/")) {
+    return null;
+  }
+
+  const proxyPath = apiHost.replace(TRAILING_SLASHES, "");
+  return proxyPath || null;
+};
+
+const isPostHogRequest = (pathname: string, proxyPath: string): boolean =>
+  pathname === proxyPath || pathname.startsWith(`${proxyPath}/`);
+
+const proxyPostHogRequest = async (
+  request: Request,
+  proxyPath: string,
+  ctx: ExecutionContext,
+): Promise<Response> => {
+  const requestUrl = new URL(request.url);
+  const upstreamPath = requestUrl.pathname.slice(proxyPath.length) || "/";
+  const isAssetRequest = upstreamPath.startsWith("/static/") || upstreamPath.startsWith("/array/");
+  const assetCache =
+    request.method === "GET" && isAssetRequest ? await caches.open("posthog") : null;
+
+  if (assetCache) {
+    const cachedResponse = await assetCache.match(request);
+
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+  }
+
+  const upstreamUrl = new URL(isAssetRequest ? POSTHOG_ASSET_ORIGIN : POSTHOG_API_ORIGIN);
+  upstreamUrl.pathname = upstreamPath;
+  upstreamUrl.search = requestUrl.search;
+
+  const headers = new Headers(request.headers);
+  const clientIp = headers.get("CF-Connecting-IP");
+  headers.delete("cookie");
+  headers.delete("host");
+
+  if (clientIp) {
+    headers.set("X-Forwarded-For", clientIp);
+  }
+
+  const response = await fetch(
+    new Request(upstreamUrl, {
+      body:
+        request.method === "GET" || request.method === "HEAD" ? null : await request.arrayBuffer(),
+      headers,
+      method: request.method,
+      redirect: request.redirect,
+    }),
+  );
+  const responseHeaders = new Headers(response.headers);
+  responseHeaders.delete("set-cookie");
+
+  const proxiedResponse = new Response(response.body, {
+    headers: responseHeaders,
+    status: response.status,
+    statusText: response.statusText,
+  });
+
+  if (assetCache && response.ok) {
+    ctx.waitUntil(assetCache.put(request, proxiedResponse.clone()));
+  }
+
+  return proxiedResponse;
+};
+
+export default {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext) {
+    const requestUrl = new URL(request.url);
+
+    if (requestUrl.pathname === VINEXT_IMAGE_PATH) {
+      return vinextHandler.fetch(request, env, ctx);
+    }
+
+    if (isThumbnailRequest(requestUrl)) {
+      return handleThumbnailRequest(request);
+    }
+
+    const proxyPath = getProxyPath(env.NEXT_PUBLIC_POSTHOG_HOST || postHogConfig.apiHost);
+
+    if (
+      postHogConfig.projectToken &&
+      proxyPath &&
+      isPostHogRequest(requestUrl.pathname, proxyPath)
+    ) {
+      return proxyPostHogRequest(request, proxyPath, ctx);
+    }
+
+    if (import.meta.env.DEV || !env.ASSETS) {
+      return vinextHandler.fetch(request, env, ctx);
+    }
+
+    const assetResponse = await env.ASSETS.fetch(request);
+
+    if (assetResponse.status !== NOT_FOUND_STATUS) {
+      return assetResponse;
+    }
+
+    return vinextHandler.fetch(request, env, ctx);
+  },
+} satisfies ExportedHandler<Env>;

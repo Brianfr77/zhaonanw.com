@@ -1,0 +1,22 @@
+diff --git a/src/workspace.ts b/src/workspace.ts
+index 78983a0e222c2dc7e2975b3d216c0aa989f3e15b..cebbb66a080ad61e3fff18b897f68f53450b85e4 100644
+--- a/src/workspace.ts
++++ b/src/workspace.ts
+@@ -18,7 +18,7 @@ export async function collectFiles(
+ 
+     for await (const file of glob.scan({ cwd: root, dot: true, onlyFiles: true })) {
+       if (!ignoreGlobs.some((ignore) => ignore.match(file))) {
+-        files.add(file);
++        files.add(file.replaceAll("\\", "/"));
+       }
+     }
+   }
+@@ -49,7 +49,7 @@ export async function discoverWorkspaces(root: string): Promise<Workspace[]> {
+     const glob = new Bun.Glob(`${pattern}/package.json`);
+ 
+     for await (const packageJsonPath of glob.scan({ cwd: root, onlyFiles: true })) {
+-      const workspaceRoot = packageJsonPath.replace(/\/package\.json$/, "");
++      const workspaceRoot = packageJsonPath.replaceAll("\\", "/").replace(/\/package\.json$/, "");
+       const packageJson = (await readPackageJson(root, workspaceRoot)) as PackageJson;
+ 
+       workspaces.push({
