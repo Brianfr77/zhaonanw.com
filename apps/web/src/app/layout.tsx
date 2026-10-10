@@ -200,14 +200,14 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
         </div>
         <footer className="mt-auto pt-12 pb-8">
           <span className="font-sans text-xs text-zinc-500">
-            &copy; {new Date().getFullYear()} Zhaonan Wang.{" "}
+            Content &copy; {new Date().getFullYear()} Zhaonan Wang. Code is{" "}
             <a
               className="underline"
               href="https://github.com/Brianfr77/zhaonanw.com"
               rel="noopener"
               target="_blank"
             >
-              Source on GitHub.
+              open source.
             </a>
           </span>
         </footer>
