@@ -68,7 +68,7 @@ const metadata: Metadata = {
   icons: {
     icon: {
       type: "image/svg+xml",
-      url: "/mark.svg",
+      url: "/mark.svg?v=20261011-b",
     },
   },
   metadataBase: SITE_URL,

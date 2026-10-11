@@ -1,5 +1,9 @@
-<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <title>Zhaonan Wang</title>
-  <rect fill="black" height="64" width="64" />
-  <path d="M15 18h34L18 46h31" fill="none" stroke="white" stroke-width="6" />
+<svg height="64" viewBox="0 0 64 64" width="64" xmlns="http://www.w3.org/2000/svg">
+  <title>Zhaonan Wang — B 双线斜骨</title>
+  <rect fill="black" height="64" rx="14" width="64" />
+  <path
+    d="M16 17H49V19L25 45H48V47H15V45L39 19H16Z M41 21H45L23 43H19Z"
+    fill="white"
+    fill-rule="evenodd"
+  />
 </svg>
