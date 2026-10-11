@@ -5,5 +5,6 @@
     d="M10 10H55V14L23 50H54V54H9V50L41 14H10Z M44 16H49L21 48H16Z"
     fill="white"
     fill-rule="evenodd"
+    transform="translate(32 32) rotate(15) scale(0.88) translate(-32 -32)"
   />
 </svg>
